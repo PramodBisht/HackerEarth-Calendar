@@ -1,0 +1,4 @@
+- url: /certificates/*
+static_dir: certificates/*
+login: admin
+application_readable: true
