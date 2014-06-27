@@ -3,7 +3,6 @@
    require_once "google-api-php-client/src/Google_Client.php";
    require_once "google-api-php-client/src/contrib/Google_CalendarService.php";
    include 'retrieve.php';
-   //
    global $event_end_day;
    date_default_timezone_set('Asia/Calcutta');
    $tday=date('d');
@@ -28,13 +27,11 @@
            file_get_contents("certificates/58dc8debcb492676e29ba7c3d98befbf3ee251de-privatekey.p12")
        )
    );
-   //
    $starteventtime=$es_year."-".$es_month."-".$es_day."T".$es_hour.":".$es_minute.":00.000+05:30";
    $endeventtime=$el_year."-".$el_month."-".$el_day."T".$el_hour.":".$el_minute.":00.000+05:30";
    $service = new Google_CalendarService($client);
-   //
+
    $event = new Google_Event();
-  // echo $event->getSummary();
    $event->setSummary($e_name);
    $event->setLocation($location);
    $event->setDescription($event_detail);
@@ -47,22 +44,21 @@
    $end->setDateTime($endeventtime);
    $end->setTimeZone('Asia/Kolkata');
    $event->setEnd($end);
-   //
+   
    $calendar_id = "gu8k601ev6u41q9udo7fc65hb0@group.calendar.google.com";
-   //
+   
    $new_event = null;
-   //
+   
    try {
        $new_event = $service->events->insert($calendar_id, $event);
-       //
        $new_event_id= $new_event->getId();
    } catch (Google_ServiceException $e) {
        syslog(LOG_ERR, $e->getMessage());
        echo $e->getMessage();
    }
-   //
+   
    $event = $service->events->get($calendar_id, $new_event->getId());
-   //
+   
    if ($event != null) {
        echo "Inserted:";
        echo "EventID=".$event->getId();
@@ -72,26 +68,20 @@
  } //end of addevent fun
    
 
- //add_event("lasttest2","New Delhi","HE event","2014","4","24","2014","4","24","19","30","19","50");
    $url = 'http://www.hackerearth.com/chrome-extension/events/';
    $JSON = file_get_contents($url);
 
   $data = json_decode($JSON);
-  //var_dump($data);
-  foreach ($data as $item) {
+   foreach ($data as $item) {
   
     $event_title=$item->title;
 
 
     $whatToStrip = array("?","!",",",";"); // Add what you want to strip in this array
     str_replace($whatToStrip, " ", $event_title);
-   // echo $event_title."<br/>";
     $event_description=$item->description."<br/>".$item->url;
-    //echo $event_description."<br/>";
-   // echo $item->time."<br/>";
     $str=explode(" ",$item->time);
     $str2=explode(":", $str[0]);
-   // echo $item->date."<br/><br/><br/>";
     $date=explode(" ",$item->date);
     $event_start_day=$date[1];
     if($date[2]=='Jan'){
@@ -151,16 +141,9 @@
     }
     $event_start_minute=$str2[1];
     $event_end_minute=$str2[1];
-
-   // echo "timing :"."<br/>".$event_start_hour.":".$event_start_minute."--".$event_end_hour.":".$event_end_minute."<br/>";
-    //echo "Date:"."<br/>".$event_start_day."-".$event_start_month."-".$event_start_year."-----".$event_end_day."-".$event_end_month."-".$event_end_year."<br/>";
-    
-   // add_event($event_title,"New Delhi",$event_description,$event_start_year,$event_start_month,$event_start_day,$event_end_year,$event_end_month,$event_end_day,$event_start_hour,$event_start_minute,$event_end_hour,$event_end_minute);
-   
     if(in_array($event_title, $string_array)==false){
         add_event($event_title,"New Delhi",$event_description,$event_start_year,$event_start_month,$event_start_day,$event_end_year,$event_end_month,$event_end_day,$event_start_hour,$event_start_minute,$event_end_hour,$event_end_minute);
-        // this block will add only those event which are not present in calendar;
-    }
+           }
     
 
   }
