@@ -25,6 +25,11 @@
    function add_event($e_name,$location,$event_detail,$es_year,$es_month,$es_day,$el_year,$el_month,$el_day,$es_hour,$es_minute,$el_hour,$el_minute){
    $client = new Google_Client();
    $client->setUseObjects(true);
+   /* this is my sincere request to anyone who is seeing this code 
+    * please don't mess with this google credential.
+    * this calendar is for the welfare of everyone.
+    * 
+   */
    $client->setApplicationName("HE-Cal");
    $client->setClientId("650696064454-fhrff2s8hd6kibn3cjn9ksjm3gleipir.apps.googleusercontent.compact(varname)");
    $client->setAssertionCredentials(new Google_AssertionCredentials(
