@@ -28,6 +28,7 @@
    /* this is my sincere request to anyone who is seeing this code 
     * please don't mess with this google credential.
     * this calendar is for the welfare of everyone.
+    * please don't try to misuse it.
     * 
    */
    $client->setApplicationName("HE-Cal");
