@@ -20,6 +20,46 @@
   } 
    session_destroy();  //destroying the session
 
+   function numericmonth($month){
+       if($month=='Jan'){
+        return 1; 
+      }else
+       if($month=='Feb'){
+        return 2; 
+      }else
+       if($month=='Mar'){
+        return 3; 
+      }else
+       if($month=='Apr'){
+        return 4; 
+      }else
+       if($month=='May'){
+        return 5; 
+      }else
+       if($month=='Jun'){
+        return 6; 
+      }else
+       if($month=='Jul'){
+        return 7; 
+      }else
+       if($month=='Aug'){
+        return 8; 
+      }else
+       if($month=='Sep'){
+        return 9; 
+      }else
+       if($month=='Oct'){
+        return 10; 
+      }else
+       if($month=='Nov'){
+        return 11; 
+      }else
+       if($month=='Dec'){
+        return 12; 
+      }
+
+   }
+
    /* add_event function add the event on google calendar using 
    google apis*/
    function add_event($e_name,$location,$event_detail,$es_year,$es_month,$es_day,$el_year,$el_month,$el_day,$es_hour,$es_minute,$el_hour,$el_minute){
@@ -96,73 +136,62 @@
       str_replace($whatToStrip, " ", $event_title);
       $event_description=$item->description."<br/>".$item->url;
       $str=explode(" ",$item->time);
+
+     // echo $item->end_time."<br>".$item->end_date."<br>";
+      $end_hour_min=explode(" ",$item->end_time);
+      $end_AM_PM =$end_hour_min[1];
+      $end_hour=explode(":",$end_hour_min[0]);// it store end hour
+      $end_minute=$end_hour[1];//it store end minutes of the event.
+      $end_hour=$end_hour[0];
+      $end_date_month_year=explode(" ",$item->end_date);
+      $end_date=$end_date_month_year[0];
+      $end_month=$end_date_month_year[1];
+      $end_year=$end_date_month_year[2];
+
       $str2=explode(":", $str[0]);
       $date=explode(" ",$item->date);  //store the date of commencement of new event of hackerearth.
-      $event_start_day=$date[1];
-      /*this if blocks of date[2] storing the month of event in numeric format*/ 
-      if($date[2]=='Jan'){
-       $event_start_month=$event_end_month=1; 
-      }else
-       if($date[2]=='Feb'){
-       $event_start_month=$event_end_month=2; 
-      }else
-       if($date[2]=='Mar'){
-       $event_start_month=$event_end_month=3; 
-      }else
-       if($date[2]=='Apr'){
-       $event_start_month=$event_end_month=4; 
-      }else
-       if($date[2]=='May'){
-       $event_start_month=$event_end_month=5; 
-      }else
-       if($date[2]=='Jun'){
-       $event_start_month=$event_end_month=6; 
-      }else
-       if($date[2]=='Jul'){
-       $event_start_month=$event_end_month=7; 
-      }else
-       if($date[2]=='Aug'){
-       $event_start_month=$event_end_month=8; 
-      }else
-       if($date[2]=='Sep'){
-       $event_start_month=$event_end_month=9; 
-      }else
-       if($date[2]=='Oct'){
-       $event_start_month=$event_end_month=10; 
-      }else
-       if($date[2]=='Nov'){
-       $event_start_month=$event_end_month=11; 
-      }else
-       if($date[2]=='Dec'){
-       $event_start_month=$event_end_month=12; 
-      }
+     
       
-      $event_start_year=$event_end_year=$date[3];
-       $event_end_day=$event_start_day;
+      $event_start_day=$date[1];
+      $event_start_month=numericmonth($date[2]);
+      $event_start_year=$date[3];
+      $event_start_hour=$str2[0];
+      $event_start_minute=$str2[1];
+      $event_end_day=$end_date;
+      $event_end_month=numericmonth($end_month);
+      $event_end_year=$end_year;
+      $event_end_minute=$end_minute;
+      $event_end_hour=$end_hour;
+     
       if($str[1]=='PM'){
         if($str2[0]!=12){
           $event_start_hour=$str2[0]+12;  //converting the hour into 24 hour system.
-        }
-       
-        $event_end_hour=($event_start_hour+4)%24;  //endhour is more than 24 after addition by above if block
-        if($event_end_hour<12){
-          $event_end_day=$event_start_day+1; /*if the event is in night then endday will be nextday result would have
-           more better if hackerearth have provided the end day and time.*/
+        }else{
+          $event_start_hour=12;
+        } 
+      }
+      if($str[1]=="AM"){
+         if($start_hour==12){
+          $event_start_hour=0;
         }
       }
-      else{
-        $event_start_hour=$str2[0];
-        $event_end_hour=$event_start_hour+4;  
-        /* we are adding four because we assume all the events will last only for 4 hours. 
-        btw Hackerearth.com don't provide end time of their events in their json feeds*/
-        $event_end_day=$event_start_day;
-        
+
+      if($end_AM_PM=='PM'){
+        if($end_hour!=12){
+          $event_end_hour=($end_hour + 12);
+        }
+        else{
+          $event_end_hour=12;
+        }
       }
-      $event_start_minute=$str2[1];
-      $event_end_minute=$str2[1];
+      if($end_AM_PM=='AM'){
+        if($end_hour==12){
+          $event_end_hour=0;
+        }
+      }
       if(in_array($event_title, $string_array)==false){
         /* this if block will only add the event if that event is not present in our calendar.*/
-          add_event($event_title,"New Delhi",$event_description,$event_start_year,$event_start_month,$event_start_day,$event_end_year,$event_end_month,$event_end_day,$event_start_hour,$event_start_minute,$event_end_hour,$event_end_minute);
+          add_event($event_title,"Web",$event_description,$event_start_year,$event_start_month,$event_start_day,$event_end_year,$event_end_month,$event_end_day,$event_start_hour,$event_start_minute,$event_end_hour,$event_end_minute);
         /*event city can be any city I put New Delhi but yes Hackerearth events can be accessed from anywhere in world google calendar will adjust timing
           for you according to your timezone*/
       }
