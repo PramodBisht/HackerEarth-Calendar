@@ -7,7 +7,7 @@ You can also checkout my public HE calendar at "https://www.google.com/calendar/
 	
 
 
-We are hosting our app at http://immense-bayou-1656.herokuapp.com
+We are hosting our app at http://hackerearth-event-fetcher.herokuapp.com/
 
 Feel free to report me for any bug!!!
 
