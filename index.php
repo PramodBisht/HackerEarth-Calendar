@@ -7,7 +7,7 @@
    date_default_timezone_set('Asia/Calcutta');
    $tday=date('d');  //getting the time according to indian timezone.
    $tmonth=date('m');
-   $tyear=date('y');
+   $tyear=date('Y');
    $today=$tyear."-".$tmonth."-".$tday."T00:01:00.000+05:30";
    fetch($today);   //this will prefetch the event already stored in our google calendar from today onwards.
   
@@ -18,6 +18,9 @@
     this are the event which are already present in our google calendar.
     */
   } 
+  if(is_null($string_array)){
+    echo "string array is null";
+  }
    session_destroy();  //destroying the session
 
    function numericmonth($month){
@@ -189,7 +192,7 @@
           $event_end_hour=0;
         }
       }
-      if(in_array($event_title, $string_array)==false){
+      if(in_array($event_title, $string_array)==false||is_null($string_array)==true){
         /* this if block will only add the event if that event is not present in our calendar.*/
           add_event($event_title,"Web",$event_description,$event_start_year,$event_start_month,$event_start_day,$event_end_year,$event_end_month,$event_end_day,$event_start_hour,$event_start_minute,$event_end_hour,$event_end_minute);
         /*event city can be any city I put New Delhi but yes Hackerearth events can be accessed from anywhere in world google calendar will adjust timing
